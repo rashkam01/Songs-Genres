@@ -56,9 +56,13 @@ df_subset = df_train[list(range(0,167,1))]
 plt.matshow(df_subset.corr())
 ```
 ![Vis_hist](hist_mlbp.PNG)
+
+As the classes are imbalanced, accuracy itself would not be that helpful to see if the performance is improving, so we get the confusion matrix which shows if for each class how many are being classified incorrectly. It can be seen clearly that class 1 has the most accuracy but few other classes are being misclassified more than it is classified correctly. Most of them are being classified to class 1 as the class 1 samples are more. That is why confusion matrix for the resampled data is again compared.
+
 ![vis_correl](correl_mlbp.PNG)
 
 ## Data Preparation
+
 #### Filtering the columns which are not correlated with the label column
 As not all the columns might be correlated with the label columns. That means the columns which do not add value to the prediction of the label are found out in the following logic through the correlation matrix. Training and checking through this filtered train was done with taking only most correlated features with chi square correlation[1] of more than absolute of the correlation statistics of 0.05 , 0.1, 0.2 but none of those increased the accuracy more than when all the fetaures were taken. It did not improve the overall accuracy so this method was not taken into consideration for final model.
 
@@ -99,6 +103,10 @@ df_test_filtered = df_test[df_test.columns[columns_to_include]]
 
 #### Normalize the data
 While analysing the values for each feature we observed that there were values ranging from as high as 1milion to -0.002, therefore the decision to normalize the data was taken before creating the models. Normalization helped in improving the accuracy of each of the models.
+
+#### Resampling of the Data
+To handle the imbalanced classes, resampling is done to get better confusion matrix where the predictions of other classes than the first one will perform better. Different combinations were tried. Undersampling of Class 1 and over sampling of other classes was tried to improve the results in confusion matrix.
+
 ```python 
 from sklearn import preprocessing
 df_train_new = pd.DataFrame()
@@ -114,3 +122,196 @@ scaled_df = scaler.fit_transform(df_test_filtered)
 df_test_new = pd.DataFrame(scaled_df, columns=names)
 ```
 
+## Multiclass classification
+
+#### Logistic Regression
+Accuracy is 73% for the testing dataset. But as the goal was to handle the imbalanced classes well and see their improvement, the f1 score is comapared with other classifier scores. F1 score has definitely increased compared to the case when resampling was not done. There the score was 59% and the new f1 score obtained is 73%.
+
+Logistic regression fits the data to a curve or sigmoid function, consist of a loss function to determine how well the data fits the defined function. The task is to maximize the log-likelihood by gradient descent to fit the parameters. Here we use the default sigmoid function and C=1e5 to obtain optimum predictions for logistic regressor.
+
+#### SVM Classifier
+Linear SVM ran on original normalized data gave the highest f1 score of 61% so grid search was ran for this to get better parameters for optimization and then after resampling on best parameters the SVM with C=10 and gamma=0.1 and kernel=rbf gave f1 score of 0.90 which gave best results in Kaggle as well.
+
+SVM strives to achieve the optimum hyperplanes which categorises the data into the various classes. Linear SVM assumes that the data is linearly separable, but not always is the data linearly separable therefore we also used other kernels in SVM such as rbf and poly kernel. The other 2 important parameters while using the SVM are the C and gamma values. “C” is the penalty for misclassification, as we increase C it leads to larger error penalties which reduces bias, increases variance and creates more overfitting. Equivalently, smaller “C” increases bias, reduces variance and causes more underfitting. Higher values of gamma mean the data points are further apart, as we increase the gamma value we go towards data overfitting and lower gamma goes towards underfitting.
+
+#### RandomForest Classifier
+RandomForest classifier gave 47% f1 score which was the least before and after resampling it increasd to 80% which is better than Logistic regression but it did not result in better results on kaggle as compared to logistic. It gave at max 59% accuracy as opposed to logistic regression which gave 61% on kaggle.
+
+Random forest is an ensemble method which builds random tress structure on the random samples of the data. The 3 most important parameters Random forest considers is the “n_estimators”, “max_features” and “max_depth, The higher values of “n_estimators” creates higher values of trees and more smoothing of data, it makes a predictiction by aggregating the individual trees predictions. The “max_features” specifies the maximum number of features in each node, smaller max_features yields more number of different trees by creating a random subset leading to more smoothing. Also, another parameter “max_depth” restricts the dept of the tree created by random forest. Various values were tweaked for the Random forest classifier, however the final parameter used for the optimum training accuracy was for max_depth = 8 and n_estimators =80.
+
+```python 
+# Linear SVM
+
+X_tl = df_train_new
+y_tl = df_train['labels']
+
+X_train, X_test, y_train, y_test = train_test_split(X_tl, y_tl,shuffle=True, test_size = 0.2, random_state = 45)
+
+clf = LinearSVC(random_state=0, tol=1e-5)
+clf.fit(X_train, y_train)
+#predictions_svm = clf.predict(X_test)
+accuracy_SVM = clf.score(X_test, y_test)
+print(accuracy_SVM)
+predic = clf.predict(X_test)
+print(classification_report(y_test,predic))
+print(confusion_matrix(y_test, predic))
+
+
+from sklearn import linear_model 
+from sklearn import metrics
+from sklearn.model_selection import cross_val_score
+clf=linear_model.LogisticRegression(C=1e5)
+#clf.fit(X_train,y_train)
+#X_train, X_test, y_train, y_test = train_test_split(X_tl, y_tl, test_size=0.2, random_state=1)
+clf.fit(X_train, y_train)
+
+accuracy_logReg = clf.score(X_test,y_test)
+#accuracy_logReg = clf.score(X_train, y_train)
+# Printing the accuracy for the logistic regression
+print("Accuracy of Logistic Regression")
+print(accuracy_logReg)
+predic = clf.predict(X_test)
+print(classification_report(y_test,predic))
+print(confusion_matrix(y_test, predic))
+
+
+from sklearn.ensemble import RandomForestClassifier
+
+#gave 99 percent accuracy
+#regr = RandomForestRegressor(max_depth=10, random_state=15,oob_score = True,n_estimators=60)
+clf = RandomForestClassifier(max_depth=8, random_state=15,oob_score = False,n_estimators=80)
+clf.fit(X_train, y_train)
+
+
+#model1 = LogisticRegression(random_state=0)
+accuracy_RF = clf.score(X_test, y_test)
+# Printing the accuracy for the logistic regression
+print("Accuracy of Random Forest")
+print(accuracy_RF)
+predic = clf.predict(X_test)
+print(classification_report(y_test,predic))
+print(confusion_matrix(y_test, predic))
+
+# 63% for LinearSVC, 59% for Logistic Regression , 57% for Random Forest
+```
+#### Check with resampling the data 
+Resampling the data as the method mentioned above. Undersampling genre 1 class and oversampling the rest of the classes proportionately. Different trials were tested to find the optimal choice of sampling numbers for classes.
+df_train_new['labels'] = df_train['labels'] 
+```python 
+from sklearn.utils import resample
+df_train_new['labels'] = df_train['labels']
+# Separate majority and minority classes
+df_train_majority = df_train_new[df_train_new['labels']==1]
+df_train_majority = resample(df_train_majority, 
+                                     replace=False,     # sample without replacement
+                                     n_samples=(1400),    # to match majority class
+                                     random_state=123)
+df_minority = df_train_new[df_train_new['labels']==2]
+df_train_minority = resample(df_minority, 
+                                     replace=True,     # sample with replacement
+                                     n_samples=(1000),    # to make it close majority class
+                                     random_state=123)
+df_upsampled = pd.concat([df_train_majority, df_train_minority])
+df_minority = df_train_new[df_train_new['labels']==3]
+df_train_minority = resample(df_minority, 
+                                     replace=True,     # sample with replacement
+                                     n_samples=(600),    # to make it close majority class
+                                     random_state=123)
+df_upsampled = pd.concat([df_upsampled, df_train_minority])
+for i in range(4,11):
+    df_minority = df_train_new[df_train_new['labels']==i]
+    #size = int(0.9*len(df_minority))
+    #print(len(df_minority) + size)
+    size = 600
+    # Upsample minority class
+    df_minority_upsampled = resample(df_minority, 
+                                     replace=True,     # sample with replacement
+                                     n_samples=(size),    # to make it close majority class
+                                     random_state=123) # reproducible results
+    df_upsampled = pd.concat([df_upsampled, df_minority_upsampled])
+X_tl = df_upsampled[names]
+# Assign labels to y_train
+y_tl = df_upsampled['labels'] 
+labels = df_upsampled['labels'].unique()
+```
+
+```python 
+# Linear SVM
+
+
+X_train, X_test, y_train, y_test = train_test_split(X_tl, y_tl, shuffle=True, test_size = 0.2, random_state = 45)
+
+clf = LinearSVC(random_state=0, tol=1e-5)
+clf.fit(X_train, y_train)
+#predictions_svm = clf.predict(X_test)
+accuracy_SVM = clf.score(X_test, y_test)
+print("Linear SVC")
+print(accuracy_SVM)
+predic = clf.predict(X_test)
+print(classification_report(y_test,predic))
+print(confusion_matrix(y_test, predic))
+
+
+from sklearn import linear_model 
+from sklearn import metrics
+from sklearn.model_selection import cross_val_score
+clf=linear_model.LogisticRegression(C=1e5)
+#clf.fit(X_train,y_train)
+#X_train, X_test, y_train, y_test = train_test_split(X_tl, y_tl, test_size=0.2, random_state=1)
+clf.fit(X_train, y_train)
+
+accuracy_logReg = clf.score(X_test,y_test)
+#accuracy_logReg = clf.score(X_train, y_train)
+# Printing the accuracy for the logistic regression
+print("Accuracy of Logistic Regression")
+print(accuracy_logReg)
+predic = clf.predict(X_test)
+print(classification_report(y_test,predic))
+print(confusion_matrix(y_test, predic))
+
+
+from sklearn.ensemble import RandomForestClassifier
+
+#gave 99 percent accuracy
+#regr = RandomForestRegressor(max_depth=10, random_state=15,oob_score = True,n_estimators=60)
+clf = RandomForestClassifier(max_depth=8, random_state=15,oob_score = False,n_estimators=80)
+clf.fit(X_train, y_train)
+
+
+#model1 = LogisticRegression(random_state=0)
+accuracy_logReg = clf.score(X_test, y_test)
+# Printing the accuracy for the logistic regression
+print("Accuracy of Random Forest")
+print(accuracy_logReg)
+predic = clf.predict(X_test)
+print(classification_report(y_test,predic))
+print(confusion_matrix(y_test, predic))
+
+clf = svm.SVC(kernel="rbf", gamma=0.1, C=10)
+clf.fit(X_train, y_train)
+
+
+#model1 = LogisticRegression(random_state=0)
+accuracy_logReg = clf.score(X_test, y_test)
+# Printing the accuracy for the logistic regression
+print("Accuracy of SVM parameters from grid search:")
+print(accuracy_logReg)
+predic = clf.predict(X_test)
+print(classification_report(y_test,predic))
+print(confusion_matrix(y_test, predic))# Linear SVM
+```
+## Analysis of Methods
+The method and process can be explained by the below sequential flow and diagram.
+
+It is to be noted that this process was an iterative process to determine the best accuracy and loss function but for convinience purposes only the sequential flow has been shown.
+
+1. Loading Train and Test Data 
+1. Data visualization with Histogram, Feature correlation matrix 
+1. Feature Selection by removal of correlated column and similar value columns -> Go To Section
+1. Normalize Data
+1. Resample Data 
+1. SVM (Best result) , Logistic Regression, Random Forest 
+1. Grid search for SVM (Kernel= rbf, C=10, gamma=0.1) 
+1. Resample vs. Non-resample for One vs Rest 
+1. SVM , Logistic Regression and Random Forest (Best result for one vs rest) 
+![flow](flow_mlbp.PNG)
