@@ -28,4 +28,4 @@ from AllMusic.com.
 The features provided are a summary representation of the 3 main components of music:
 timbre, pitch (melody and harmony) and rhythm. A very brief description of these
 components:
-![song_genre_data_desc](https://github.com/rashmizany/Songs-Genres/blob/master/song_genre_data_desc.PNG)
+![song_genre_data_desc](song_genre_data_desc.PNG)
