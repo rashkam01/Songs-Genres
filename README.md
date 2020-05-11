@@ -12,13 +12,13 @@ from AllMusic.com.
 
 ### And an ordered list:
 
-1 'Pop_Rock'
-2 'Electronic'
-3 'Rap'
-4 'Jazz'
-5 'Latin'
-6 'RnB'
-7 'International'
-8 'Country'
-9 'Reggae'
-10 'Blues'. 
+1. Pop_Rock
+1. Electronic
+1. Rap
+1. Jazz
+1. Latin
+1. RnB
+1. International
+1. Country
+1. Reggae
+1. Blues 
