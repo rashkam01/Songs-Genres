@@ -329,5 +329,5 @@ Oversampling and under sampling methods were used to resample the data to avoid 
 
 The final accuracies on Kaggle :
 
-Challenge 1: Highest Accuracy obtained is 0.63
-Challenge 2: Lowest Log-loss obtained is 0.194
+* Challenge 1: Highest Accuracy obtained is 0.63
+* Challenge 2: Lowest Log-loss obtained is 0.194
