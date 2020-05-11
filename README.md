@@ -340,7 +340,7 @@ Some of the limitation and further exploration to increase accuracy are as follo
 To further improve this accuracy we need more data, especially from the imbalanced classes such as class 9 and class 10.
 Machine learning methods explored were only 3 namely Support vector machines, Random forest and logistic regression. Therefore, it can be further explored for various other techniques such as KNN, Neural networks etc.
 Feature refining can also be considered, other relevant features of the songs can be obtained in order to increase the accuracy of classification.
-Dive deeper into fine tuning grid parameters for each of the techniques used to better overcome underfitting or over-fitting of the data.
+Dive deeper into fine tuning grid parameters for each of the techniques used to better overcome underfitting or over-fitting of the data. 
 
 ## References 
 1. Correlation matrix https://datascienceplus.com/multi-class-text-classification-with-scikit-learn/
