@@ -331,3 +331,22 @@ The final accuracies on Kaggle :
 
 * Challenge 1: Highest Accuracy obtained is 0.63
 * Challenge 2: Lowest Log-loss obtained is 0.194
+
+## Discussion and Conclusion 
+After applying various machine learning techniques on the dataset to achieve the best possible accuracy for classification, the highest test(validation) accuracy was achieved by Support vector machine with fine tuned parameter and rbf kernel and the least log loss in One Vs. rest classification method was achieved in RandomForest Regressor. RandomForest regressor works better on imbalanced data so it can be seen from the results as well as in the second case the results were achieved without resampling itself. These obtained results can be further extended to more music tracks, where each music track can be turned into same features that were used for these models and classified into its respective genre.
+
+Some of the limitation and further exploration to increase accuracy are as follows:
+
+To further improve this accuracy we need more data, especially from the imbalanced classes such as class 9 and class 10.
+Machine learning methods explored were only 3 namely Support vector machines, Random forest and logistic regression. Therefore, it can be further explored for various other techniques such as KNN, Neural networks etc.
+Feature refining can also be considered, other relevant features of the songs can be obtained in order to increase the accuracy of classification.
+Dive deeper into fine tuning grid parameters for each of the techniques used to better overcome underfitting or over-fitting of the data.
+
+## References 
+1. Correlation matrix https://datascienceplus.com/multi-class-text-classification-with-scikit-learn/
+1. Music Genre Classification, Michael Haggblade, Yang Hong, Kenny Kao http://cs229.stanford.edu/proj2011/HaggbladeHongKao-MusicGenreClassification.pdf
+1. Li T, Ogihara M, Li Q. A Comparative study on content-based music genre classification. In: Proceedings of the 26th annual international ACM SI-GIR conference on research and development in information retrieval. Toronto: ACM Press; 2003. p. 282–9
+1. Music Genre Classification via Machine Learning, Li Guo(liguo94), Zhiwei Gu(zhiweig), Tianchi Liu(kitliu5) https://pdfs.semanticscholar.org/f179/e8abd5c4752c36a3505fb5f3abfb483687ca.pdf
+1. Classifying the Subjective: Determining Genre of Music From Lyrics, Ahmed Bou-Rabee, Keegan Go, Karanveer Mohan, 2012, http://cs229.stanford.edu/proj2012/BourabeeGoMohan-ClassifyingTheSubjectiveDeterminingGenreOfMusicFromLyrics.pdf
+1. For svm parameters https://pdfs.semanticscholar.org/f179/e8abd5c4752c36a3505fb5f3abfb483687ca.pdf
+1. For code snippets: http://scikit-learn.org/stable/
