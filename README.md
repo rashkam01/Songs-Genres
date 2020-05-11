@@ -26,6 +26,5 @@ from AllMusic.com.
 ### Features of the song 
 The features provided are a summary representation of the 3 main components of music:
 timbre, pitch (melody and harmony) and rhythm. A very brief description of these
-components:
-
+components.
 ![song_genre_desc](https://github.com/rashmizany/Songs-Genres/blob/master/song_genre_data_desc.PNG)
