@@ -10,7 +10,7 @@ with 6544 songs. Each song has 264 features, and there are 10 possible classes i
 The dataset is a custom subset of the Million Song Dataset, and the labels were obtained
 from AllMusic.com. 
 
-### And an ordered list:
+### Music genre are as follows:
 
 1. Pop_Rock
 1. Electronic
