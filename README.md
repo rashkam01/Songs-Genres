@@ -300,7 +300,7 @@ predic = clf.predict(X_test)
 print(classification_report(y_test,predic))
 print(confusion_matrix(y_test, predic))# Linear SVM
 ```
-## Analysis of Methods
+## Project flowchart 
 The method and process can be explained by the below sequential flow and diagram.
 
 It is to be noted that this process was an iterative process to determine the best accuracy and loss function but for convinience purposes only the sequential flow has been shown.
@@ -315,3 +315,19 @@ It is to be noted that this process was an iterative process to determine the be
 1. Resample vs. Non-resample for One vs Rest 
 1. SVM , Logistic Regression and Random Forest (Best result for one vs rest) 
 ![flow](flow_mlbp.PNG)
+
+## Results
+Each of the model was evaluated using resampled training set of 7200 samples and a test set of 6544 test dataset songs with 244 features.
+
+While analysing the values for each feature we observed that there were values ranging from as high as 1milion to -0.002, therefore normalization was done on the data before creating the models. Normalization helped in improving the accuracy of each of the models.
+
+It was observed that from the class distribution histogram that there exists an imbalance in the class distribution. The class distribution for class 1 vs Other classes was almost 1:1 ratio resulting in misclassification resulting in prediction for most common class i.e. class 1/genre 1. Although there was high accuracy obtained, it turned out to be deluding or misleading on testing against the test dataset (Kaggle upload). This was also clearly seen when we created the confusion matrix. (Check above for confusion matrix provided for further details.)
+
+![flow](result_mlbp.PNG)
+
+Oversampling and under sampling methods were used to resample the data to avoid the mispredictions. Class 1 was under-sampled to 1400 random resampling strategies without the replacement. Class 2 was over-sampled to 1000 random samples with replacement. Remaining classes from 3 to 10 were over-sampled to 600 random samples. It is important to note in this case, the sampling was purposely not kept at 1:1 ration for all classes. Since class 1 to class 10 ratio was almost 25:1, therefore too much oversampling for class 10 or too less under-sampling for class 1 meant losing quality of the data. We tried various permutation and combination for the resampling strategies before finalizing on the ones which we used for the models. The confusion matrix also proved to be extremely useful for analysing the misleading classification even though we achieved a high accuracy for test data.
+
+The final accuracies on Kaggle :
+
+Challenge 1: Highest Accuracy obtained is 0.63
+Challenge 2: Lowest Log-loss obtained is 0.194
