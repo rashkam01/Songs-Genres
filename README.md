@@ -307,13 +307,13 @@ It is to be noted that this process was an iterative process to determine the be
 
 1. Loading Train and Test Data 
 1. Data visualization with Histogram, Feature correlation matrix 
-1. Feature Selection by removal of correlated column and similar value columns -> Go To Section
+1. Feature Selection by removal of correlated column and similar value columns
 1. Normalize Data
 1. Resample Data 
 1. SVM (Best result) , Logistic Regression, Random Forest 
 1. Grid search for SVM (Kernel= rbf, C=10, gamma=0.1) 
 1. Resample vs. Non-resample for One vs Rest 
-1. SVM , Logistic Regression and Random Forest (Best result for one vs rest) 
+1. SVM, Logistic Regression and Random Forest (Best result for one vs rest) 
 ![flow](flow_mlbp.PNG)
 
 ## Results
