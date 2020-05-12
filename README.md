@@ -8,7 +8,7 @@ or discovery.
 The data is split into two datasets: a training data set with 4363 songs, and a test set dataset
 with 6544 songs. Each song has 264 features, and there are 10 possible classes in total.
 The dataset is a custom subset of the Million Song Dataset, and the labels were obtained
-from AllMusic.com.
+from AllMusic.com. This was a part of Kaggle competition and the details can be found [here.](https://www.kaggle.com/c/mlbp-data-analysis-challenge-accuracy-2018/overview)
 
 #### Music genre are as follows:
 
